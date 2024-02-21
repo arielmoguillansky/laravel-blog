@@ -23,7 +23,7 @@ class AdminPostController extends Controller
     {
         $attributes = request()->validate([
             'title'=>'required',
-            'thumbnail'=>'image',
+            'thumbnail'=>$post->exists ? ['image'] : ['required', 'image'],
             'slug'=>['required', Rule::unique('posts', 'slug')->ignore($post->id)],
             'excerpt'=>'required',
             'body'=>'required',
@@ -51,9 +51,11 @@ class AdminPostController extends Controller
 
     public function store()
     {
+        $post = new Post();
+
         $attributes = request()->validate([
             'title'=>'required',
-            'thumbnail'=>'required|image',
+            'thumbnail'=>$post->exists ? ['image'] : ['required', 'image'],
             'slug'=>['required', Rule::unique('posts', 'slug')],
             'excerpt'=>'required',
             'body'=>'required',

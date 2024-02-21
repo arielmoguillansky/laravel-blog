@@ -33,7 +33,20 @@
                         <span class="mr-4 cursor-pointer">Welcome, {{auth()->user()->name}}</span>
                     </x-slot>
                     <x-dropdown-item href="/">Dashboard</x-dropdown-item>
-                    <x-dropdown-item href="/admin/posts/create">New post</x-dropdown-item>
+                    {{-- @if (auth()->user()->can('admin'))
+                        <x-dropdown-item href="/admin/posts/create">New post</x-dropdown-item>
+                        <x-dropdown-item href="/admin/posts">Manage posts</x-dropdown-item>
+                    @endif --}}
+                    {{-- The admin is a blade directive that can be built in the AppServiceProvider--}}
+                    {{-- @admin
+                        <x-dropdown-item href="/admin/posts/create">New post</x-dropdown-item>
+                        <x-dropdown-item href="/admin/posts">Manage posts</x-dropdown-item>
+                    @endadmin --}}
+                    {{-- Alternative to show links only for administrator. The name 'admin' cames from the Gate method in the AppServiceProvider --}}
+                    @can ('admin')
+                        <x-dropdown-item href="/admin/posts/create">New post</x-dropdown-item>
+                        <x-dropdown-item href="/admin/posts">Manage posts</x-dropdown-item>
+                    @endcan
                     <x-dropdown-item href="/logout" x-data="{}" @click.prevent="document.querySelector('#logout-form').submit()">Log Out</x-dropdown-item>
                 </x-dropdown>
                 <form action="/logout" method="post" class="hidden" id="logout-form">

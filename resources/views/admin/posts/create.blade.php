@@ -1,6 +1,6 @@
 <x-layout>
   <h1>New post</h1>
-  <form action="/admin/post" method="POST" enctype="multipart/form-data">
+  <form action="/admin/posts" method="POST" enctype="multipart/form-data">
     @csrf
     <x-form.input name="title"/>
     <x-form.input name="slug"/>

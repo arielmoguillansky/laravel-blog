@@ -15,8 +15,8 @@ class AdminsOnly
      */
     public function handle(Request $request, Closure $next): Response
     {
-
-        if(auth()->user()?->username != 'shiftlabny')
+        // This works in case Gate is not defined in the AppProvideService. It can be removed if Gate is defined, removed from the Http\Kernel file and replace the middleware name in the routes file with can:admin.
+        if(auth()->user()?->cannot('admin'))
         {
             abort(Response::HTTP_FORBIDDEN);
         }

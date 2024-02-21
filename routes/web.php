@@ -99,9 +99,13 @@ Route::post('register', [RegisterController::class, 'store'])->middleware('guest
 Route::get('login', [SessionsController::class, 'create'])->middleware('guest');
 Route::post('login', [SessionsController::class, 'store'])->name('login');
 Route::post('logout', [SessionsController::class, 'destroy'])->middleware('auth');
-Route::post('admin/post', [AdminPostController::class, 'store'])->middleware('admin');
-Route::get('admin/posts/create', [AdminPostController::class, 'create'])->middleware('admin');
-Route::get('admin/posts/{post:id}/edit', [AdminPostController::class, 'edit'])->middleware('admin');
-Route::patch('admin/posts/{post:id}', [AdminPostController::class, 'update'])->middleware('admin');
-Route::delete('admin/posts/{post:id}', [AdminPostController::class, 'delete'])->middleware('admin');
-Route::get('admin/posts', [AdminPostController::class, 'index'])->middleware('admin');
+// Route::post('admin/post', [AdminPostController::class, 'store'])->middleware('can:admin'); Alternative when using Gate. In the Http\Kernel file the method 'can' is already declared so it works as a middleware 
+Route::middleware('admin')->group(function(){
+    // Route::resource('admin/posts', AdminPostController::class)->except('show'); This will automatically create all seven CRUD methods for admin/posts. It can be visualized executing php artisan route:list. The except method tells Laravel to avoid creating the show endpoint.
+    Route::post('admin/posts', [AdminPostController::class, 'store']);
+    Route::get('admin/posts/create', [AdminPostController::class, 'create']);
+    Route::get('admin/posts/edit/{post:id}', [AdminPostController::class, 'edit']);
+    Route::patch('admin/posts/{post:id}', [AdminPostController::class, 'update']);
+    Route::delete('admin/posts/{post:id}', [AdminPostController::class, 'delete']);
+    Route::get('admin/posts', [AdminPostController::class, 'index']);
+});
